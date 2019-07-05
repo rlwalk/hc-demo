@@ -4,4 +4,4 @@
 
 
 ## References
-- [HashiCorp GitHub Site: https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/dynamic-aws-creds]
+- [HashiCorp GitHub Site] (https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/dynamic-aws-creds)
