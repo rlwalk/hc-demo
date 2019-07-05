@@ -3,11 +3,14 @@
 
 
 
-## References
+## Resources
+- [AWS](https://aws.amazon.com)
+- [Terraform Cloud](https://app.terraform.io/app/rlwalk/workspaces)
 - [HashiCorp GitHub Dynamic AWS Credentials](https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/dynamic-aws-creds)
 - [HashiCorp's Vault](https://www.vaultproject.io/)
 - [Terraform Vault provider](https://www.terraform.io/docs/providers/vault/)
 - [Vault AWS Secret Engine](https://www.vaultproject.io/docs/secrets/aws/index.html)
+
 
 ## Environment Setup
 
@@ -25,9 +28,9 @@ export VAULT_ADDR=http://127.0.0.1:8200
 ```
 
 
-Terraform
+Terraform Setup
 
-Workspace Key
+Ensure user token exists
 ```sh
 $ vi ~/.terraformrc
 ```
