@@ -13,6 +13,8 @@
 
 Vault Setup
 
+Download and install Vault
+
 ```sh
 
 $ vault server -dev -dev-root-token-id=root
@@ -20,4 +22,17 @@ $ vault server -dev -dev-root-token-id=root
 export VAULT_TOKEN=root
 export VAULT_ADDR=http://127.0.0.1:8200
 
+```
+
+
+Terraform
+
+Workspace Key
+```sh
+$ vi ~/.terraformrc
+```
+```sh
+credentials "app.terraform.io" {
+     token = "QkeAI5u7y0HuGA.atlasv1.ocGMXKzmtUEnITreDK2ur9MRHtje8WLeP9NPdj0kgyBODneFAxsyBjid55sVt4O0JP0"
+   }
 ```
