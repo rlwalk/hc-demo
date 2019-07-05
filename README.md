@@ -13,11 +13,11 @@
 
 Vault Setup
 
-'''sh
+```sh
 
 $ vault server -dev -dev-root-token-id=root
 
 export VAULT_TOKEN=root
 export VAULT_ADDR=http://127.0.0.1:8200
 
-'''
+```
