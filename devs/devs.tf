@@ -1,4 +1,4 @@
-variable "name" { default = "dynamic-aws-creds-consumer" }
+variable "name" { default = "dev-aws-creds" }
 variable "path" { default = "../ops/terraform.tfstate" }
 variable "ttl"  { default = "1" }
 
@@ -20,20 +20,23 @@ terraform {
   }
 }
 
-
-data "terraform_remote_state" "producer" {
-  backend = "local"
+data "terraform_remote_state" "foo" {
+  backend = "remote"
 
   config = {
-    path = "${var.path}"
+    organization = "rlwalk"
+
+    workspaces = {
+      name = "ops"
+    }
   }
 }
 
 data "vault_aws_access_credentials" "creds" {
 #  backend = "${data.terraform_remote_state.producer.backend}"
 #  role = "${data.terraform_remote_state.producer.role}"
-  backend = "dynamic-aws-creds-producer-path"
-  role = "dynamic-aws-creds-producer-role"
+  backend = "dev-aws-creds-path"
+  role = "dev-aws-creds-role"
 }
 
 provider "aws" {
@@ -50,6 +53,6 @@ resource "aws_instance" "main" {
   tags = {
     Name  = "${var.name}"
     TTL   = "${var.ttl}"
-    owner = "${var.name}-guide"
+    owner = "${var.name}-webapp"
   }
 }

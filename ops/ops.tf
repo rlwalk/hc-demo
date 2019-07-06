@@ -1,10 +1,22 @@
 variable "aws_access_key" { }
 variable "aws_secret_key" { }
-variable "name"           { default = "dynamic-aws-creds-producer" }
+variable "name"           { default = "dev-aws-creds" }
 
+/*
 terraform {
   backend "local" {
     path = "terraform.tfstate"
+  }
+}
+*/
+
+terraform {
+  backend "remote" {
+    organization = "rlwalk"
+
+    workspaces {
+      name = "ops"
+    }
   }
 }
 
@@ -19,7 +31,7 @@ resource "vault_aws_secret_backend" "aws" {
   max_lease_ttl_seconds     = "240"
 }
 
-resource "vault_aws_secret_backend_role" "producer" {
+resource "vault_aws_secret_backend_role" "ops" {
   backend = "${vault_aws_secret_backend.aws.path}"
   name    = "${var.name}-role"
   credential_type = "iam_user"
@@ -46,5 +58,5 @@ output "backend" {
 }
 
 output "role" {
-  value = "${vault_aws_secret_backend_role.producer.name}"
+  value = "${vault_aws_secret_backend_role.ops.name}"
 }
