@@ -1,12 +1,25 @@
 variable "name" { default = "dynamic-aws-creds-consumer" }
-variable "path" { default = "../producer-workspace/terraform.tfstate" }
+variable "path" { default = "../ops/terraform.tfstate" }
 variable "ttl"  { default = "1" }
 
+/*
 terraform {
   backend "local" {
     path = "terraform.tfstate"
   }
 }
+*/
+
+terraform {
+  backend "remote" {
+    organization = "rlwalk"
+
+    workspaces {
+      name = "devs"
+    }
+  }
+}
+
 
 data "terraform_remote_state" "producer" {
   backend = "local"
