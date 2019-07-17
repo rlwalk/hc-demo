@@ -1,15 +1,14 @@
-variable "name" { default = "dev-aws-creds" }
-variable "path" { default = "../ops/terraform.tfstate" }
-variable "ttl"  { default = "1" }
-
-/*
-terraform {
-  backend "local" {
-    path = "terraform.tfstate"
-  }
+variable "name" {
+  description = "Server and owner identifier"
+  default = "dev-aws-creds"
 }
-*/
 
+variable "aws_region" {
+  description = "Default AWS Region"
+  default = "us-east-1"
+}
+
+# Configure remote workspace for .tfstate file
 terraform {
   backend "remote" {
     organization = "rlwalk"
@@ -20,7 +19,8 @@ terraform {
   }
 }
 
-data "terraform_remote_state" "foo" {
+# Declare ops workspace
+data "terraform_remote_state" "ops" {
   backend = "remote"
 
   config = {
@@ -32,17 +32,17 @@ data "terraform_remote_state" "foo" {
   }
 }
 
+# Grab dynamic aws creds path and role from Ops output
 data "vault_aws_access_credentials" "creds" {
-#  backend = "${data.terraform_remote_state.producer.backend}"
-#  role = "${data.terraform_remote_state.producer.role}"
-  backend = "dev-aws-creds-path"
-  role = "dev-aws-creds-role"
+  backend = data.terraform_remote_state.ops.outputs.backend
+  role = data.terraform_remote_state.ops.outputs.role
 }
 
+# Declare aws provider using dynamic credentials
 provider "aws" {
   access_key = "${data.vault_aws_access_credentials.creds.access_key}"
   secret_key = "${data.vault_aws_access_credentials.creds.secret_key}"
-  region = "us-east-1"
+  region = "${var.aws_region}"
 }
 
 # Create AWS EC2 Instance
@@ -52,7 +52,6 @@ resource "aws_instance" "main" {
 
   tags = {
     Name  = "${var.name}"
-    TTL   = "${var.ttl}"
     owner = "${var.name}-webapp"
   }
 }
