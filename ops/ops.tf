@@ -10,22 +10,10 @@ variable "dev-creds"           {
 
 }
 
-/*
+# Tell Terraform to use local backend
 terraform {
   backend "local" {
     path = "terraform.tfstate"
-  }
-}
-*/
-
-
-terraform {
-  backend "remote" {
-    organization = "rlwalk"
-
-    workspaces {
-      name = "ops"
-    }
   }
 }
 
