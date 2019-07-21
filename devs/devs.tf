@@ -1,34 +1,32 @@
-variable "name" {
+# Set server owner identifier
+variable "identifier" {
   description = "Server and owner identifier"
-  default = "dev-aws-creds"
+  default = "dev-aws-team"
 }
 
+# Set Default AWS Region
 variable "aws_region" {
   description = "Default AWS Region"
   default = "us-east-1"
 }
 
-# Configure remote workspace for .tfstate file
-terraform {
-  backend "remote" {
-    organization = "rlwalk"
+# Set path to ops state file
+variable "path" {
+  default = "../ops/terraform.tfstate"
+}
 
-    workspaces {
-      name = "devs"
-    }
+# Set state file to be stored locally
+terraform {
+  backend "local" {
+    path = "terraform.tfstate"
   }
 }
 
-# Declare ops workspace
 data "terraform_remote_state" "ops" {
-  backend = "remote"
+  backend = "local"
 
   config = {
-    organization = "rlwalk"
-
-    workspaces = {
-      name = "ops"
-    }
+    path = "${var.path}"
   }
 }
 
@@ -51,7 +49,7 @@ resource "aws_instance" "main" {
   instance_type = "t2.micro"
 
   tags = {
-    Name  = "${var.name}"
-    owner = "${var.name}-webapp"
+    Name  = "${var.identifier}"
+    owner = "${var.identifier}-webapp"
   }
 }
