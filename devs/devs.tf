@@ -47,6 +47,7 @@ provider "aws" {
 resource "aws_instance" "main" {
   ami           = "ami-0cfee17793b08a293"
   instance_type = "t2.micro"
+#  count = 2
 
   tags = {
     Name  = "${var.identifier}"
